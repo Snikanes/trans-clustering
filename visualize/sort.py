@@ -1,5 +1,5 @@
-filename = "/Users/eirikvikanes/Dropbox/Skolearbeid/Master/struc2vec/graph/bitcoin.edgelist"
-out = "/Users/eirikvikanes/Dropbox/Skolearbeid/Master/struc2vec/graph/bitcoin-sorted.edgelist"
+filename = "/Users/eirikvikanes/Developer/trans-clustering/graph/bitcoin.edgelist"
+out = "/Users/eirikvikanes/Developer/trans-clustering/graph/bitcoin-undirected.edgelist"
 
 def tuple_cmp(first, second):
     diff = first[0] - second[0]
@@ -23,8 +23,10 @@ def write_trans(out_file, trans):
 def remove_directionality(trans):
     # (not so) Quick and dirty
     saved = set()
+    
     undirected_trans = []
     for t in trans:
+        #print(saved)
         # Make sure a list exists for each key in map
         if (t[0], t[1]) not in saved:
             undirected_trans.append((t[0], t[1]))
@@ -33,13 +35,14 @@ def remove_directionality(trans):
 
 with open(filename, 'r') as f:
     transactions = read_trans(f)
-    undirected = remove_directionality(transactions)
-    sorted_trans = sort_transactions(undirected)
+    sorted_trans = sort_transactions(transactions)
+    #print(transactions)
+    undirected = remove_directionality(sorted_trans)
 
 with open(out, 'w') as out_f:
-    write_trans(out_f, sorted_trans)
+    write_trans(out_f, undirected)
 
-# trans = [(1,2), (2,1), (1,3), (3,1), (2,3)]
+# trans = [(1,2), (1,3), (1,5), (2,1), (2,3), (3,1), (3,2), (3,2), (5,1)]
 # print remove_directionality(trans)
 
 
