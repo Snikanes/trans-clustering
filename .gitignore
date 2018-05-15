@@ -103,3 +103,6 @@ ENV/
 random_walks.txt
 .ipynb_checkpoints
 pickles/
+visualize/img/*
+sdne-keras/log/*
+visualize/p2p_may.txt
