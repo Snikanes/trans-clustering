@@ -33,8 +33,7 @@ mat = kneighbors_graph(vectors, N, metric='cosine', mode='distance', include_sel
 mat.data = 1 - mat.data  # to similarity
 
 g = nx.from_scipy_sparse_matrix(mat, create_using=nx.Graph())
-print(g.number_of_edges())
-print(len(list(g.nodes())))
+
 
 parameter_grid = {'alpha': [2],
                   'l2_param': [1e-3],

@@ -90,7 +90,7 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=30.0):
     return P
 
 
-def pca(X=np.array([]), no_dims=300):
+def pca(X=np.array([]), no_dims=100):
     """
         Runs PCA on the NxD array X in order to reduce its dimensionality to
         no_dims dimensions.
@@ -104,7 +104,7 @@ def pca(X=np.array([]), no_dims=300):
     return Y
 
 
-def tsne(X=np.array([]), no_dims=2, initial_dims=300, perplexity=30.0):
+def tsne(X=np.array([]), no_dims=2, initial_dims=100, perplexity=30.0):
     """
         Runs t-SNE on the dataset in the NxD array X to reduce its
         dimensionality to no_dims dimensions. The syntaxis of the function is

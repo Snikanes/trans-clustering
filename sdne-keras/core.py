@@ -163,10 +163,8 @@ class SDNE():
     def train_data_generator(self, batch_size=32):
         # this can become quadratic if using dense
         m = self.graph.number_of_edges()
-        print(self.adj_mat.shape)
         while True:
             for i in range(math.ceil(m / batch_size)):
-                print("i: ", i)
                 sel = slice(i*batch_size, (i+1)*batch_size)
                 nodes_a = self.edges[sel, 0][:, None]
                 nodes_b = self.edges[sel, 1][:, None]

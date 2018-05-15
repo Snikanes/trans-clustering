@@ -18,14 +18,7 @@ batch_size = 32
 dataset = pd.read_csv('../struc2vec/graph/bitcoin-undirected.edgelist', sep=' ', names=['from', 'to'])
 
 g = nx.from_pandas_edgelist(dataset, 'from', 'to')
-
-highest_node = max(dataset['to'].max(), dataset['from'].max()) + 1
-matrix = np.ndarray(shape=(highest_node, highest_node))
-
-for edge in g.edges():
-    matrix[edge[0]][edge[1]] = 1
-
-g = nx.from_numpy_matrix(matrix)
+g = nx.convert_node_labels_to_integers(g, label_attribute='old')
 
 parameter_grid = {'alpha': [2],
                   'l2_param': [1e-3],
@@ -45,7 +38,7 @@ def one_run(params):
     pretrain_epochs = params['pretrain_epochs']
     epochs = params['epochs']
 
-    model = SDNE(g, encode_dim=100, encoding_layer_dims=[100, 32],
+    model = SDNE(g, encode_dim=50, encoding_layer_dims=[100, 32],
                  beta=2,
                  alpha=alpha,
                  l2_param=l2_param)
@@ -55,15 +48,19 @@ def one_run(params):
     print("Batch size: {}".format(batch_size))
     print("N-batches: {}".format(n_batches))
 
-    model.fit(epochs=epochs, log=True, batch_size=batch_size,
+    model.fit(epochs=10, log=True, batch_size=batch_size,
               steps_per_epoch=n_batches)
 
     embedding_name = 'alpha{}-l2_param{}-epochs{}-pre_epochs{}'.format(alpha, l2_param, epochs, pretrain_epochs)
     
     embeddings = model.get_node_embedding()
-    print(embeddings.shape)
-    emb_df = pd.DataFrame(embeddings)
-    emb_df.to_csv("emb/btc/{}.csv".format(embedding_name))
+    return (pd.DataFrame(embeddings), embedding_name)
 
 for params in tqdm(parameter_dicts):
-    one_run(params)
+    emb_df, embedding_name = one_run(params)
+    print(emb_df.head())
+    print(emb_df.info())
+    
+    node_mapping = nx.get_node_attributes(g, "old")
+    emb_df.index = pd.Index(list(map(lambda node: node_mapping[node], emb_df.index.values)))
+    emb_df.to_csv("emb/btc/{}.csv".format(embedding_name))
