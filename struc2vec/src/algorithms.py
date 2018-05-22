@@ -12,14 +12,14 @@ from utils import *
 
 def generate_parameters_random_walk(workers):
 
-    logging.info('Loading distances_nets from disk...')
+    #logging.info('Loading distances_nets from disk...')
 
     sum_weights = {}
     amount_edges = {}
     
     layer = 0
     while(isPickle('distances_nets_weights-layer-'+str(layer))):
-        logging.info('Executing layer {}...'.format(layer))            
+        #logging.info('Executing layer {}...'.format(layer))            
         weights = restoreVariableFromDisk('distances_nets_weights-layer-'+str(layer))
     
         for k,list_weights in weights.iteritems():
@@ -32,7 +32,7 @@ def generate_parameters_random_walk(workers):
                 sum_weights[layer] += w
                 amount_edges[layer] += 1
         
-        logging.info('Layer {} executed.'.format(layer))
+        #logging.info('Layer {} executed.'.format(layer))
         layer += 1
 
     average_weight = {}
@@ -46,7 +46,7 @@ def generate_parameters_random_walk(workers):
 
     layer = 0
     while(isPickle('distances_nets_weights-layer-'+str(layer))):
-        logging.info('Executing layer {}...'.format(layer))            
+        #logging.info('Executing layer {}...'.format(layer))            
         weights = restoreVariableFromDisk('distances_nets_weights-layer-'+str(layer))
 
         amount_neighbours[layer] = {}
@@ -61,7 +61,7 @@ def generate_parameters_random_walk(workers):
         logging.info('Layer {} executed.'.format(layer))
         layer += 1
 
-    logging.info("Saving amount_neighbours on disk...")
+    #logging.info("Saving amount_neighbours on disk...")
     saveVariableOnDisk(amount_neighbours,'amount_neighbours')
 
 def chooseNeighbor(v,graphs,alias_method_j,alias_method_q,layer):
@@ -114,7 +114,7 @@ def exec_ramdom_walks_for_chunck(vertices,graphs,alias_method_j,alias_method_q,w
 
 def generate_random_walks_large_graphs(num_walks,walk_length,workers,vertices):
 
-    logging.info('Loading distances_nets from disk...')
+    #logging.info('Loading distances_nets from disk...')
 
     graphs = restoreVariableFromDisk('distances_nets_graphs')
     alias_method_j = restoreVariableFromDisk('nets_weights_alias_method_j')
@@ -141,7 +141,7 @@ def generate_random_walks_large_graphs(num_walks,walk_length,workers,vertices):
 
 
     t1 = time()
-    logging.info('RWs created. Time : {}m'.format((t1-t0)/60))
+    #logging.info('RWs created. Time : {}m'.format((t1-t0)/60))
     logging.info("Saving Random Walks on disk...")
     save_random_walks(walks)
 
@@ -180,7 +180,7 @@ def generate_random_walks(num_walks,walk_length,workers,vertices):
 
 
     t1 = time()
-    logging.info('RWs created. Time: {}m'.format((t1-t0)/60))
+    #logging.info('RWs created. Time: {}m'.format((t1-t0)/60))
     logging.info("Saving Random Walks on disk...")
     save_random_walks(walks)
 

@@ -111,7 +111,7 @@ class Graph():
 
 			part = 1
 			for c in chunks:
-				logging.info("Executing part {}...".format(part))
+				#logging.info("Executing part {}...".format(part))
 				list_v = []
 				for v in c:
 					list_v.append([vd for vd in degreeList.keys() if vd > v])
@@ -125,7 +125,7 @@ class Graph():
 			for job in as_completed(futures):
 				job.result()
 				r = futures[job]
-				logging.info("Part {} Completed.".format(r))
+				#logging.info("Part {} Completed.".format(r))
 		
 		logging.info('Distances calculated.')
 		t1 = time()
@@ -138,7 +138,7 @@ class Graph():
 
 		logging.info("Using compactDegree: {}".format(compactDegree))
 		if(self.calcUntilLayer):
-			logging.info("Calculations until layer: {}".format(self.calcUntilLayer))
+			#logging.info("Calculations until layer: {}".format(self.calcUntilLayer))
 
 		futures = {}
 		#distances = {}
@@ -153,12 +153,12 @@ class Graph():
 
 		with ProcessPoolExecutor(max_workers = 1) as executor:
 
-			logging.info("Split degree List...")
+			#logging.info("Split degree List...")
 			part = 1
 			for c in chunks:
 				job = executor.submit(splitDegreeList,part,c,G,compactDegree)
 				job.result()
-				logging.info("degreeList {} completed.".format(part))
+				#logging.info("degreeList {} completed.".format(part))
 				part += 1
 
 		
@@ -166,16 +166,16 @@ class Graph():
 
 			part = 1
 			for c in chunks:
-				logging.info("Executing part {}...".format(part))
+				#logging.info("Executing part {}...".format(part))
 				job = executor.submit(calc_distances, part, compactDegree = compactDegree)
 				futures[job] = part
 				part += 1
 
-			logging.info("Receiving results...")
+			#logging.info("Receiving results...")
 			for job in as_completed(futures):
 				job.result()
 				r = futures[job]
-				logging.info("Part {} completed.".format(r))
+				#logging.info("Part {} completed.".format(r))
 
 
 		return

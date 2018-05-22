@@ -79,7 +79,7 @@ def getCompactDegreeLists(g, root, maxDegree,calcUntilLayer):
 
 
     t1 = time()
-    logging.info('BFS vertex {}. Time: {}s'.format(root,(t1-t0)))
+    #logging.info('BFS vertex {}. Time: {}s'.format(root,(t1-t0)))
 
     return listas
 
@@ -144,7 +144,7 @@ def getDegreeLists(g, root, calcUntilLayer):
 
 
     t1 = time()
-    logging.info('BFS vertex {}. Time: {}s'.format(root,(t1-t0)))
+    #logging.info('BFS vertex {}. Time: {}s'.format(root,(t1-t0)))
 
 
     return listas
@@ -170,7 +170,7 @@ def cost_max(a,b):
 
 def preprocess_degreeLists():
 
-    logging.info("Recovering degreeList from disk...")
+    #logging.info("Recovering degreeList from disk...")
     degreeList = restoreVariableFromDisk('degreeList')
 
     logging.info("Creating compactDegreeList...")
@@ -271,13 +271,13 @@ def get_vertices(v,degree_v,degrees,a_vertices):
 
 def splitDegreeList(part,c,G,compactDegree):
     if(compactDegree):
-        logging.info("Recovering degreeList from disk...")
+        #logging.info("Recovering degreeList from disk...")
         degreeList = restoreVariableFromDisk('compactDegreeList')
     else:
-        logging.info("Recovering compactDegreeList from disk...")
+        #logging.info("Recovering compactDegreeList from disk...")
         degreeList = restoreVariableFromDisk('degreeList')
 
-    logging.info("Recovering degree vector from disk...")
+    #logging.info("Recovering degree vector from disk...")
     degrees = restoreVariableFromDisk('degrees_vector')
 
     degreeListsSelected = {}
@@ -416,12 +416,12 @@ def exec_bfs_compact(G,workers,calcUntilLayer):
     parts = workers
     chunks = partition(vertices,parts)
 
-    logging.info('Capturing larger degree...')
+    #logging.info('Capturing larger degree...')
     maxDegree = 0
     for v in vertices:
         if(len(G[v]) > maxDegree):
             maxDegree = len(G[v])
-    logging.info('Larger degree captured')
+    #logging.info('Larger degree captured')
 
     with ProcessPoolExecutor(max_workers=workers) as executor:
 
@@ -436,10 +436,10 @@ def exec_bfs_compact(G,workers,calcUntilLayer):
             v = futures[job]
             degreeList.update(dl)
 
-    logging.info("Saving degreeList on disk...")
+    #logging.info("Saving degreeList on disk...")
     saveVariableOnDisk(degreeList,'compactDegreeList')
     t1 = time()
-    logging.info('Execution time - BFS: {}m'.format((t1-t0)/60))
+    #logging.info('Execution time - BFS: {}m'.format((t1-t0)/60))
 
 
     return
@@ -467,10 +467,10 @@ def exec_bfs(G,workers,calcUntilLayer):
             v = futures[job]
             degreeList.update(dl)
 
-    logging.info("Saving degreeList on disk...")
+    #logging.info("Saving degreeList on disk...")
     saveVariableOnDisk(degreeList,'degreeList')
     t1 = time()
-    logging.info('Execution time - BFS: {}m'.format((t1-t0)/60))
+    #logging.info('Execution time - BFS: {}m'.format((t1-t0)/60))
 
 
     return
@@ -481,7 +481,7 @@ def generate_distances_network_part1(workers):
     weights_distances = {}
     for part in range(1,parts + 1):    
         
-        logging.info('Executing part {}...'.format(part))
+        #logging.info('Executing part {}...'.format(part))
         distances = restoreVariableFromDisk('distances-'+str(part))
         
         for vertices,layers in distances.iteritems():
@@ -492,7 +492,7 @@ def generate_distances_network_part1(workers):
                     weights_distances[layer] = {}
                 weights_distances[layer][vx,vy] = distance
 
-        logging.info('Part {} executed.'.format(part))
+        #logging.info('Part {} executed.'.format(part))
 
     for layer,values in weights_distances.iteritems():
         saveVariableOnDisk(values,'weights_distances-layer-'+str(layer))
@@ -503,7 +503,7 @@ def generate_distances_network_part2(workers):
     graphs = {}
     for part in range(1,parts + 1):
 
-        logging.info('Executing part {}...'.format(part))
+        #logging.info('Executing part {}...'.format(part))
         distances = restoreVariableFromDisk('distances-'+str(part))
 
         for vertices,layers in distances.iteritems():
@@ -518,7 +518,7 @@ def generate_distances_network_part2(workers):
                    graphs[layer][vy] = [] 
                 graphs[layer][vx].append(vy)
                 graphs[layer][vy].append(vx)
-        logging.info('Part {} executed.'.format(part))
+        #logging.info('Part {} executed.'.format(part))
 
     for layer,values in graphs.iteritems():
         saveVariableOnDisk(values,'graphs-layer-'+str(layer))
@@ -560,10 +560,10 @@ def generate_distances_network_part3():
         saveVariableOnDisk(weights,'distances_nets_weights-layer-'+str(layer))
         saveVariableOnDisk(alias_method_j,'alias_method_j-layer-'+str(layer))
         saveVariableOnDisk(alias_method_q,'alias_method_q-layer-'+str(layer))
-        logging.info('Layer {} executed.'.format(layer))
+        #logging.info('Layer {} executed.'.format(layer))
         layer += 1
 
-    logging.info('Weights created.')
+    #logging.info('Weights created.')
 
     return
 
@@ -610,7 +610,7 @@ def generate_distances_network_part6():
         logging.info('Layer {} executed.'.format(layer))
         layer += 1
 
-    logging.info("Saving nets_weights_alias_method_q on disk...")
+    #logging.info("Saving nets_weights_alias_method_q on disk...")
     saveVariableOnDisk(alias_method_q_c,'nets_weights_alias_method_q')
 
     return
@@ -634,10 +634,10 @@ def generate_distances_network(workers):
         job.result()
     t1 = time()
     t = t1-t0
-    logging.info('- Time - part 2: {}s'.format(t))
-    logging.info('distance network created.')
+    #logging.info('- Time - part 2: {}s'.format(t))
+    #logging.info('distance network created.')
 
-    logging.info('Transforming distances into weights...')
+    #logging.info('Transforming distances into weights...')
 
     t0 = time()
     os.system("rm "+returnPathStruc2vec()+"/../pickles/distances_nets_weights-layer-*.pickle")
@@ -648,7 +648,7 @@ def generate_distances_network(workers):
         job.result()
     t1 = time()
     t = t1-t0
-    logging.info('- Time - part 3: {}s'.format(t))
+    #logging.info('- Time - part 3: {}s'.format(t))
 
     t0 = time()
     with ProcessPoolExecutor(max_workers=1) as executor:
@@ -656,7 +656,7 @@ def generate_distances_network(workers):
         job.result()
     t1 = time()
     t = t1-t0
-    logging.info('- Time - part 4: {}s'.format(t))
+    #logging.info('- Time - part 4: {}s'.format(t))
 
     t0 = time()
     with ProcessPoolExecutor(max_workers=1) as executor:
@@ -664,7 +664,7 @@ def generate_distances_network(workers):
         job.result()
     t1 = time()
     t = t1-t0
-    logging.info('- Time - part 5: {}s'.format(t))
+    #logging.info('- Time - part 5: {}s'.format(t))
 
     t0 = time()
     with ProcessPoolExecutor(max_workers=1) as executor:
@@ -672,7 +672,7 @@ def generate_distances_network(workers):
         job.result()
     t1 = time()
     t = t1-t0
-    logging.info('- Time - part 6: {}s'.format(t))
+    #logging.info('- Time - part 6: {}s'.format(t))
  
     return
 

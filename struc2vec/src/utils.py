@@ -30,7 +30,7 @@ def restoreVariableFromDisk(name):
     with open(folder_pickles + name + '.pickle', 'rb') as handle:
         val = pickle.load(handle)
     t1 = time()
-    logging.info('Variable recovered. Time: {}m'.format((t1-t0)/60))
+    #logging.info('Variable recovered. Time: {}m'.format((t1-t0)/60))
 
     return val
 
@@ -40,7 +40,7 @@ def saveVariableOnDisk(f,name):
     with open(folder_pickles + name + '.pickle', 'wb') as handle:
         pickle.dump(f, handle, protocol=pickle.HIGHEST_PROTOCOL)
     t1 = time()
-    logging.info('Variable saved. Time: {}m'.format((t1-t0)/60))
+    #logging.info('Variable saved. Time: {}m'.format((t1-t0)/60))
 
     return
 

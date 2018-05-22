@@ -106,3 +106,4 @@ pickles/
 visualize/img/*
 sdne-keras/log/*
 visualize/p2p_may.txt
+emb/*
