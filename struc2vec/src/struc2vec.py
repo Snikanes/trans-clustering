@@ -137,8 +137,6 @@ class Graph():
 	def calc_distances(self, compactDegree = False):
 
 		logging.info("Using compactDegree: {}".format(compactDegree))
-		if(self.calcUntilLayer):
-			#logging.info("Calculations until layer: {}".format(self.calcUntilLayer))
 
 		futures = {}
 		#distances = {}
